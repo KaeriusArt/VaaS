@@ -120,7 +120,7 @@ def main():
     gvm_command = ["gvm-script","--gmp-username","admin","--gmp-password","admin1234","socket","--socketpath","/usr/var/run/gvm/gvmd/gvmd.sock",]
 
     print(f"The queued index '{args.index}' is now under OpenVas.")
-
+    update_feeds()
     if check_feed_status(gvm_command):
         print("All feeds are up-to-date. Proceeding to VAPT scan...")
         perform_scan(gvm_command, args.target, args.index)
