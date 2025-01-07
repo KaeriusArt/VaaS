@@ -26,7 +26,7 @@ def run_nikto_scan(target, index):
         "docker", "run", "--rm",
         "-v", f"{reports_dir}:/Nikto/Reports",
         "sullo/nikto",
-        "-Display", "1234",
+        "-Display", "P",
         "-h", target,
         "-Format", "csv",
         "-o", report_path,
