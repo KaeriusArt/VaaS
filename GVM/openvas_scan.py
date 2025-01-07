@@ -12,7 +12,6 @@ def get_home_directory():
         return f"Error fetching home directory: {e}"
 
 home_directory = get_home_directory()
-print(f"Home Directory: {home_directory}")
 
 tools_dir = f"{home_directory}/VaaS/GVM/gvm-tools/scripts/"
 
