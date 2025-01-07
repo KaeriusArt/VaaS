@@ -3,8 +3,17 @@ import subprocess
 import argparse
 from datetime import datetime
 
+def get_home_directory():
+    try:
+        home_dir = os.path.expanduser("~")
+        return home_dir
+    except Exception as e:
+        return f"Error fetching home directory: {e}"
+
+home_directory = get_home_directory()
+
 def run_nikto_scan(target, index):
-    reports_dir = "/home/ubuntu1/VaaS/_Reports"
+    reports_dir = f"{home_directory}/VaaS/_Reports"
 
     current_date = datetime.now().strftime("%Y%m%d")
     report_name = f"{index}_nikto_{current_date}.csv"
