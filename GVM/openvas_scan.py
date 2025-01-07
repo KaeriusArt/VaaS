@@ -4,7 +4,17 @@ import subprocess
 import argparse
 from datetime import datetime
 
-tools_dir = "/home/ubuntu1/VaaS/GVM/gvm-tools/scripts/"
+def get_home_directory():
+    try:
+        home_dir = os.path.expanduser("~")
+        return home_dir
+    except Exception as e:
+        return f"Error fetching home directory: {e}"
+
+home_directory = get_home_directory()
+print(f"Home Directory: {home_directory}")
+
+tools_dir = f"{home_directory}/VaaS/GVM/gvm-tools/scripts/"
 
 def check_feed_status(gvm_command):
     try:
@@ -93,7 +103,7 @@ def perform_scan(gvm_command, target, index):
                 
                 # Export report
                 subprocess.run(
-                    gvm_command + [f"{tools_dir}export-csv-report.gmp.py", uid, f"/home/ubuntu1/VaaS/_Reports/{report_name}"]
+                    gvm_command + [f"{tools_dir}export-csv-report.gmp.py", uid, f"{home_directory}/VaaS/_Reports/{report_name}"]
                 )
                 subprocess.run(gvm_command + [f"{tools_dir}clean-sensor.gmp.py"])
                 break
