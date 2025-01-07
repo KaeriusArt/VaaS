@@ -4,9 +4,18 @@ import subprocess
 import argparse
 from datetime import datetime
 
+def get_home_directory():
+    try:
+        home_dir = os.path.expanduser("~")
+        return home_dir
+    except Exception as e:
+        return f"Error fetching home directory: {e}"
+
+home_directory = get_home_directory()
+
 def run_zap_scan(target, index):
-    zap_dir = "/home/ubuntu1/VaaS/Zap"
-    reports_dir = "/home/ubuntu1/VaaS/_Reports"
+    zap_dir = f"{home_directory}/VaaS/Zap"
+    reports_dir = f"{home_directory}/VaaS/_Reports"
     
     cleaned_target = target.replace("https://", "").replace("http://", "")
     current_date = datetime.now().strftime("%Y%m%d")
