@@ -5,10 +5,34 @@ import re
 import argparse
 from datetime import datetime
 import subprocess
+import socket
+import os
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-host = "https://192.168.100.2"
+
+def get_host_ip():
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+            s.connect(("8.8.8.8", 80))  
+            ip_address = s.getsockname()[0]
+        return ip_address
+    except Exception as e:
+        return f"Error fetching IP: {e}"
+host_ip = get_host_ip()
+
+def get_home_directory():
+    try:
+        home_dir = os.path.expanduser("~")
+        return home_dir
+    except Exception as e:
+        return f"Error fetching home directory: {e}"
+
+home_directory = get_home_directory()
+
+
+
+host = f"https://{host_ip}"
 
 def get_headers():
     time.sleep(2)
@@ -330,7 +354,7 @@ if __name__ == "__main__":
     
     cleaned_target = target.replace("https://", "").replace("http://", "")
     cur_datetime = datetime.now().strftime("%Y%m%d")
-    filepath = f'/home/ubuntu1/VaaS/_Reports/{args.index}_nessus_{cur_datetime}.csv'
+    filepath = f'{home_directory}/VaaS/_Reports/{args.index}_nessus_{cur_datetime}.csv'
 
     print(f"The queued index '{args.index}' is now under Nessus.")
     update_feed()
