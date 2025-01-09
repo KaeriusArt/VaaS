@@ -2,7 +2,6 @@ import os
 import shutil
 import subprocess
 import argparse
-from datetime import datetime
 
 def get_home_directory():
     try:
@@ -16,10 +15,8 @@ home_directory = get_home_directory()
 def run_zap_scan(target, index):
     zap_dir = f"{home_directory}/VaaS/Zap"
     reports_dir = f"{home_directory}/VaaS/_Reports"
-    
-    cleaned_target = target.replace("https://", "").replace("http://", "")
-    current_date = datetime.now().strftime("%Y%m%d")
-    report_name = f"{index}_zap_{current_date}"
+
+    report_name = f"{index}_Zap"
 
     json_report_path = f"/zap/wrk/{report_name}.json"
     local_report_path = os.path.join(zap_dir, f"{report_name}.json")
@@ -41,7 +38,7 @@ def run_zap_scan(target, index):
     print(command)
     print(f"Running ZAP scan for target: {target} with index: {index}")
     subprocess.run(docker_command, check=False)
-    print("ZAP scan complete.")
+    print("ZAP scan complete. progress %: 100")
     
     if os.path.isfile(local_report_path):
         print(f"Report found: {local_report_path}")
