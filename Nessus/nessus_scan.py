@@ -264,7 +264,7 @@ def main(target_system,filepath):
             "filters": [],
             "launch_now": True,
             "enabled": True,
-            "name": f"{target_system} {cur_datetime}",
+            "name": f"{target_system}",
             "description": "",
             "folder_id": 3,
             "scanner_id": "1",
@@ -280,7 +280,7 @@ def main(target_system,filepath):
     except ValueError:
         print(response.text)
 
-
+    error = False
     while True:
         url = f"{host}:8834/scans/{scan_id}?"
         while True:
@@ -290,13 +290,19 @@ def main(target_system,filepath):
                 target = data.get("info", {}).get("targets")
                 status = data.get("info", {}).get("status")
                 scan_progress_current = data.get("hosts", [{}])[0].get("scanprogresscurrent")
+                error = False
                 break
             except:
                 print(f"No Host Found Please Wait......{status}")
+                if status == "completed": 
+                    error = True
+                    break
                 time.sleep(30)
                 continue
-        print(f"\r{target} {status} {scan_progress_current}%          ", end="")
-        if status == "completed":
+        if error: break
+        print(f"{target} {status} nessus progress: {scan_progress_current}%          ", end="\n")
+        if status == "canceled": break
+        if status == "completed" and not error:
             print("\nScan is complete. Generating CSV file....")
             download_file(export_scan(scan_id,get_headers()), Results_filepath)
             time.sleep(5)
@@ -353,8 +359,7 @@ if __name__ == "__main__":
     target = args.target
     
     cleaned_target = target.replace("https://", "").replace("http://", "")
-    cur_datetime = datetime.now().strftime("%Y%m%d")
-    filepath = f'{home_directory}/VaaS/_Reports/{args.index}_nessus_{cur_datetime}.csv'
+    filepath = f'{home_directory}/VaaS/_Reports/{args.index}_Nessus.csv'
 
     print(f"The queued index '{args.index}' is now under Nessus.")
     update_feed()
@@ -364,13 +369,4 @@ if __name__ == "__main__":
     else:
         update_feed()
         wait_feed_status()
-        main(cleaned_target,filepath)
-    
-
-
-
-
-
-
-
-
+        main(cleaned_target,filepath) 
