@@ -1,7 +1,6 @@
 import os
 import subprocess
 import argparse
-from datetime import datetime
 
 def get_home_directory():
     try:
@@ -15,8 +14,7 @@ home_directory = get_home_directory()
 def run_nikto_scan(target, index):
     reports_dir = f"{home_directory}/VaaS/_Reports"
 
-    current_date = datetime.now().strftime("%Y%m%d")
-    report_name = f"{index}_nikto_{current_date}.csv"
+    report_name = f"{index}_Nikto.csv"
     report_path = f"/Nikto/Reports/{report_name}"
     
     
@@ -37,7 +35,7 @@ def run_nikto_scan(target, index):
     command = ' '.join(docker_command)
     print(command)
     subprocess.run(docker_command, check=False)
-    print("Nikto scan complete.")
+    print("Nikto scan complete. ~100% complete",end="\n")
 
     if os.path.exists(destination_path):
         print(f"Report successfully generated: {destination_path}")
