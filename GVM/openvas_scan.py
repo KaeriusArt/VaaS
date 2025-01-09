@@ -2,7 +2,6 @@ import os
 import time
 import subprocess
 import argparse
-from datetime import datetime
 
 def get_home_directory():
     try:
@@ -24,7 +23,7 @@ def check_feed_status(gvm_command):
         )
         # Check if any line doesn't have "Up-to-date..."
         for line in result.stdout.splitlines()[4:]:
-            print(line)
+            print(line,end="\n")
 
             if "Up-to-date..." not in line:
                 if "Update in progress..." in line:
@@ -74,11 +73,10 @@ def wait_for_update(gvm_command):
 
 # Perform VAPT scan
 def perform_scan(gvm_command, target, index):
-    print(f"Target: {target}")
+    print(f"Target: {target}",end="\n")
 
     cleaned_target = target.replace("https://", "").replace("http://", "")
-    current_date = datetime.now().strftime("%Y%m%d")
-    report_name = f"{index}_openvas_{current_date}"
+    report_name = f"{index}_OpenVAS"
 
     try:
         # Start scan
@@ -97,7 +95,7 @@ def perform_scan(gvm_command, target, index):
             lines = result.stdout.splitlines()
             status, progress = lines[6].split()[13], lines[6].split()[15]
             uid = lines[6].split()[2]
-            print(f"\rUID: {uid} Current Status: {status}, Progress: {progress}            ", end="")
+            print(f"UID: {uid} Current Status: {status}, Progress: {progress}            ",end="\n")
             if status == "Done" and progress == "100%":
                 
                 # Export report
